@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@media(max-width: 1080px){
+    html {
+        font-size: 93.75%;
+    }
+}
+@media(max-width: 720px){
+    html {
+        font-size: 87.5%;
+    }
+}
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto;
+}
+.flex-container > div {
+  margin: 10px;
+  padding: 20px;
+}
+.form-register {
+	width: 500px;
+	padding: 20px;
+	margin: 0 auto;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	margin-top: 1.9rem;
+}
+.textboxregister label,
+input {
+	display: block;
+	outline: none;
+	line-height: 25px;
+	width: 100%;
+}
+.textboxregister {
+	position: relative;
+}
+.textboxregister input {
+	padding: 0 15px;
+}
