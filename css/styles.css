@@ -23,6 +23,27 @@
 .table_info {
     margin-top: 50px;
 }
+.hidden {
+	display: none;
+}
+.form-group input:focus + .check-message {
+    display: none;
+}
+.form-group > .check-message {
+	position: absolute;
+	padding-bottom: 25px;
+	right: 1rem;
+	color: #ff4040 !important;
+	transform: translateY(-50%);
+}
+.form-group label,
+input,
+select {
+	display: block;
+	outline: none;
+	line-height: 25px;
+	width: 100%;
+}
 #title-register > th {
     border: 1px solid rgba(0, 0, 0, 0.3);
 }

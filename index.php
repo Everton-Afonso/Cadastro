@@ -1,3 +1,7 @@
+<?php 
+    require_once "./classes/Crud_business_father.class.php";
+   $business_father = new business_father();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -13,33 +17,53 @@
 <body>
     <div class="container">
         <form class="form-register">
-            <div class="form-group">
-                <label for="full-name">Nome Completo</label>
-                <input type="text" class="form-control" name="full-name" id="full-name">
+            <div class="form-row">
+                <div class="form-group col-md">
+                    <label for="full-name">Nome Completo</label>
+                    <input type="text" class="form-control" name="full-name" id="full-name">
+                    <span class="check-message hidden">Obrigatório</span>
+                </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="cell">Celular</label>
                     <input type="number" class="form-control" name="cell" id="cell">
+                    <span class="check-message hidden">Obrigatório</span>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="business-father"> Pai Empresarial</label>
-                    <input type="text" class="form-control" name="business-father" id="business-father">
+                    <select id="business-father"class="form-control">
+                        <?php
+                            $dados = $business_father->select_business_father();
+
+                            foreach ($dados as $value){
+                        ?>  
+                                <option value="<?php echo $value['id_business_father']?>">
+                                        <?php
+                                            echo $value['name'];
+                                        ?>
+                                </option>
+                        <?php
+                            }
+                        ?>
+                    </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="state">Estado</label>
                     <select id="state"class="form-control" onchange="buscaCidades(this.value)">
-                        <option value="">Selecionar um estado</option>
+                        <option value=""></option>
+                        
                     </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="city">cidades</label>
                     <select id="city" class="form-control">
-                        <option value="">selecione uma cidade</option>
+                        <option value=""></option>
                     </select>
+                    
                 </div>
             </div>
-            <input type="submit" class="btn btn-primary">
+            <input type="submit" class="btn btn-primary register-btn" disabled>
         </form>
 
         <div class="table_info">
@@ -79,7 +103,7 @@
         </div>
     </div>
 
-    
+    <script type="text/javascript" src="scripts/validates_form.js"></script>
 
     <script type="text/javascript" src="scripts/city.js"></script>
     
