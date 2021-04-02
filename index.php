@@ -19,22 +19,48 @@
 </head>
 <body>
     <div class="container">
-        <?php 
-        if (!empty($_POST))
-        {
-            $full_name = $_POST['full-name'];
-            $cell = $_POST['cell'];
-            $business_father = (int)$_POST['business-father'];
-            $state = $_POST['state'];
-            $city = $_POST['city'];
+        <?php
+        $select_business = $business_father->select_business_father();
 
-            var_dump("nome: ".$full_name, " celular: ".$cell, $business_father, " estado: ".$state, " cidade: ".$city);
+        if (isset($_POST['full-name']) && isset($_POST['cell']) && isset($_POST['state']) && isset($_POST['city'])){
+
+            $full_name = addslashes($_POST['full-name']);
+            $cell = addslashes($_POST['cell']);
+            $business_father = (int)$_POST['business-father'];
+            $state = addslashes($_POST['state']);
+            $city = addslashes($_POST['city']);
+
             date_default_timezone_set('America/Sao_Paulo');
-            $data = date('d/m/Y  H:i');;
-                            echo $data; 
-        }
+            $date = date('Y-m-d H:i:s');
+            
+            if(!empty($full_name) && !empty($cell) && !empty($state) && !empty($city)) {
+                $full_name = ucwords(strtolower($_POST['full-name']));
+
+                if(!$user_information->insert($full_name, $cell, $state, $city, $date, $business_father)){
+            ?>
+                    <div class="alert-erro">
+                        <span class="fa fa-thumbs-o-up"></span>
+                        <span class="msg">Já existe uma pessoa cadastrada com esse Celular</span>
+                        <span class="close-btn">
+                            <span class="fa-time"></span>
+                        </span>
+                    </div>
+            <?php
+                }else {
+            ?>
+                    <div class="alert-acerto">
+                        <span class="fa fa-thumbs-o-up"></span>
+                        <span class="msg">Cadastrado com sucesso</span>
+                        <span class="close-btn">
+                            <span class="fa-time"></span>
+                        </span>
+                    </div>
+            <?php                
+                }
+            }
+        }   
         ?>
-        <form class="form-register" method="POST">
+        <form method="POST" class="form-register">
             <h3 class="text-center">Cadastro de Empresários</h3>
             <div class="form-row">
                 <div class="form-group col-md">
@@ -51,9 +77,7 @@
                     <label for="business-father"> Pai Empresarial</label>
                     <select id="business-father" class="form-control" name="business-father">
                         <?php
-                            $dados = $business_father->select_business_father();
-
-                            foreach ($dados as $value){
+                            foreach ($select_business as $value){
                         ?>  
                                 <option value="<?php echo $value['id_business_father']?>">
                                         <?php
@@ -101,15 +125,15 @@
                         $dados = $user_information->select_user_information();
 
                         foreach ($dados as $value){
-                            $data = $value['joined_on'];
-                            
-                            $result = date('d/m/Y H:i', strtotime($data));
+
+                            $date = $value['joined_on'];
+                            $result = date('d/m/Y H:i', strtotime($date));
                     ?>
                         <tr id="value-register">
                     <?php 
                             echo "<td>".$value['full_name']."</td>";
                             echo "<td>".$value['cell']."</td>";
-                            echo "<td>".$value['state']."/".$value['city']."</td>";
+                            echo "<td>".$value['city']." / ".$value['state']."</td>";
                             echo "<td>".$result."</td>";
                             echo "<td>".$value['name']."</td>";
                     ?>

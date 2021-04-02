@@ -13,6 +13,36 @@
         font-size: 87.5%;
     }
 }
+.alert-erro {
+	background-color: rgba(255, 0, 0, 0.7);
+	padding: 10px 20px;
+	min-width: 300px;
+	position: absolute;
+	right: 0px;
+	overflow: hidden;
+	border-radius: 4px;
+	border-left: 8px solid #f00e0e;
+	color: white;
+}
+.alert-erro .msg {
+	padding: 0 12px;
+	font-weight: 700;
+}
+.alert-acerto {
+	background-color: rgba(50, 205, 50, 0.7);
+	padding: 10px 20px;
+	min-width: 300px;
+	position: absolute;
+	right: 0px;
+	overflow: hidden;
+	border-radius: 4px;
+	border-left: 8px solid #238e23;
+	color: white;
+}
+.alert-acerto .msg {
+	padding: 0 12px;
+	font-weight: 700;
+}
 .form-register {
 	width: 500px;
 	padding: 20px;
