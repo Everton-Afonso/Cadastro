@@ -4,6 +4,9 @@
 
     $business_father = new business_father();
     $user_information = new user_information();
+
+    ob_start();
+    session_start();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -137,8 +140,12 @@
                             echo "<td>".$result."</td>";
                             echo "<td>".$value['name']."</td>";
                     ?>
-                            <td>Rede</td>
-                            <td>Excluir</td>
+                            <td>
+                                <a href="?view=<?php echo $value['name'];?>" id="to-edit">Rede</a>
+                            </td>
+                            <td>
+                                <a href="?id_delete=<?php echo $value['id_user'];?>" id="delete">Excluir</a>
+                            </td>
                         </tr>
                     <?php 
                         }
@@ -146,6 +153,97 @@
                 </tbody>
             </table>
         </div>
+
+        <?php
+            if (isset($_GET['id_delete'])) {
+            ?>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#exampleModalCenter').modal('show');
+                    })
+                </script>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="exampleModalLongTitle">Tem certeza de que deseja excluir os dados ?</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                            <?php
+                                $dados = $user_information->select_id((int)$_GET['id_delete']);
+
+                                if(count($dados) > 0){
+                                    
+                                    echo "<h5> Nome: ".$dados['full_name']."</h5>";
+                                    
+                                }
+                                $_SESSION["id_user"] = $dados["id_user"];
+                            ?>
+                            </div>
+                            <div class="modal-body">
+                                <p>Caso os dados sejam excluidos, não sera possível desfazer essa ação!!.</p>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                    <a href="index.php" class="btn btn-danger">Não</a>
+                                    <a href="index.php?id=<?php echo $_SESSION["id_user"];?>" class="btn btn-success">Sim</a>
+                            </div>
+                            <?php 
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            <?php           
+            }elseif (isset($_GET["id"])) {
+
+                $id = (int)$_SESSION["id_user"];
+                $user_information->delete($id);
+                header("Location: index.php");
+
+            }elseif (isset($_GET['view'])) {
+                $name = $user_information->select_network($_GET['view']);
+                
+                ?>
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $('#exampleModalCenter').modal('show');
+                        })
+                    </script>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="exampleModalLongTitle"> Rede do <?php echo $_GET['view']; ?>:</h6>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                <?php
+                                    
+                                    var_dump($name['full_name']);
+                                    foreach ($name as $value){
+                                        echo "<h5> - ".$value."</h5>";
+                                    } 
+                                    
+                                ?>
+                                </div>
+                                <div class="modal-footer justify-content-center">
+                                        <a href="index.php" class="btn btn-danger">Não</a>
+                                        <a href="index.php?id=<?php echo $_SESSION["id_user"];?>" class="btn btn-success">Sim</a>
+                                </div>
+                                <?php 
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php 
+            }
+        ?>
     </div>
 
     <script type="text/javascript" src="scripts/city.js"></script>
@@ -157,3 +255,6 @@
 
 </body>
 </html>
+<?php
+    ob_end_flush();
+?>

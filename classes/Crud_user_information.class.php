@@ -34,5 +34,37 @@
                 return true;
             }
         }
+
+        public function select_id($id) {
+            $pdo = connection();
+            $result = array();
+
+            $select = $pdo->prepare("SELECT * FROM user_information INNER JOIN business_father ON 
+            id_business_father = business_father AND id_user = :id_user");
+            $select->bindValue('id_user', $id);
+            $select->execute();
+            $result = $select->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
+        public function select_network($name) {
+            $pdo = connection();
+            $result = array();
+
+            $select = $pdo->prepare("SELECT * FROM user_information INNER JOIN business_father 
+                ON id_business_father = business_father WHERE name = :name");
+            $select->bindValue('name', $name);
+            $select->execute();
+            $result = $select->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
+        public function delete($id){
+            $pdo = connection();
+
+            $delete = $pdo->prepare("DELETE FROM user_information WHERE id_user = :id_user");
+            $delete->bindValue('id_user', $id);
+            $delete->execute();
+        }
     }
 ?>
