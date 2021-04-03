@@ -141,7 +141,7 @@
                             echo "<td>".$value['name']."</td>";
                     ?>
                             <td>
-                                <a href="?view=<?php echo $value['name'];?>" id="to-edit">Rede</a>
+                                <a href="?id_view=<?php echo $value['business_father'];?>" id="to-edit">Rede</a>
                             </td>
                             <td>
                                 <a href="?id_delete=<?php echo $value['id_user'];?>" id="delete">Excluir</a>
@@ -203,47 +203,36 @@
                 $user_information->delete($id);
                 header("Location: index.php");
 
-            }elseif (isset($_GET['view'])) {
-                $name = $user_information->select_network($_GET['view']);
-                
+            }elseif (isset($_GET['id_view'])) {                
                 ?>
-                    <script type="text/javascript">
-                        $(document).ready(function() {
-                            $('#exampleModalCenter').modal('show');
-                        })
-                    </script>
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h6 class="modal-title" id="exampleModalLongTitle"> Rede do <?php echo $_GET['view']; ?>:</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                <?php
-                                    
-                                    var_dump($name['full_name']);
-                                    foreach ($name as $value){
-                                        echo "<h5> - ".$value."</h5>";
-                                    } 
-                                    
-                                ?>
-                                </div>
-                                <div class="modal-footer justify-content-center">
-                                        <a href="index.php" class="btn btn-danger">Não</a>
-                                        <a href="index.php?id=<?php echo $_SESSION["id_user"];?>" class="btn btn-success">Sim</a>
-                                </div>
-                                <?php 
-                                ?>
-                            </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#exampleModalCenter').modal('show');
+                })
+            </script>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
+                        <div class="modal-body">
+                        <?php
+                            $dados = $user_information->select_network($_GET['id_view']);
+                        ?>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <a href="index.php" class="btn btn-success">Fechar</a>
+                        </div>
+                        <?php 
+                        }
+                        ?>
                     </div>
-                <?php 
-            }
-        ?>
+                </div>
+            </div>
     </div>
 
     <script type="text/javascript" src="scripts/city.js"></script>

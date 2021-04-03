@@ -10,6 +10,7 @@
 
             $result = $select->fetchAll(PDO::FETCH_ASSOC);
             return $result;
+
         }
 
         public function insert($full_name, $cell, $state, $city, $date, $business_father){
@@ -47,24 +48,39 @@
             return $result;
         }
 
-        public function select_network($name) {
-            $pdo = connection();
-            $result = array();
-
-            $select = $pdo->prepare("SELECT * FROM user_information INNER JOIN business_father 
-                ON id_business_father = business_father WHERE name = :name");
-            $select->bindValue('name', $name);
-            $select->execute();
-            $result = $select->fetch(PDO::FETCH_ASSOC);
-            return $result;
-        }
-
         public function delete($id){
             $pdo = connection();
 
             $delete = $pdo->prepare("DELETE FROM user_information WHERE id_user = :id_user");
             $delete->bindValue('id_user', $id);
             $delete->execute();
+        }
+
+        public function select_network($id) {
+            $pdo = connection();
+            $result = array();
+            $select = $pdo->prepare("SELECT * FROM user_information 
+                INNER JOIN business_father ON id_business_father = business_father WHERE business_father = :id");
+            $select->bindValue('id', $id);
+            $select->execute();
+
+            $result = $select->fetchAll(PDO::FETCH_ASSOC);
+            echo "<ul>";
+                foreach($result as $attribute => $value){
+                    if(is_array($value)){
+                        echo "<li>";
+                            echo "<ul>";
+                                echo "<li>".$value['full_name']."</li>";
+                            echo "</ul>";
+                        echo "</li>";  
+                         
+                    } else {
+                        echo "<li>".$attribute.": ".$value."</li>";
+                         
+                    }
+                }
+            echo "</ul>";
+            
         }
     }
 ?>
