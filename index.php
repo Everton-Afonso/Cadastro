@@ -1,12 +1,12 @@
 <?php 
-    require_once "./classes/Crud_business_father.class.php";
     require_once "./classes/Crud_user_information.class.php";
 
-    $business_father = new business_father();
     $user_information = new user_information();
 
     ob_start();
     session_start();
+
+    $dados = $user_information->select_user_information();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -23,13 +23,11 @@
 <body>
     <div class="container">
         <?php
-        $select_business = $business_father->select_business_father();
-
         if (isset($_POST['full-name']) && isset($_POST['cell']) && isset($_POST['state']) && isset($_POST['city'])){
 
             $full_name = addslashes($_POST['full-name']);
             $cell = addslashes($_POST['cell']);
-            $business_father = (int)$_POST['business-father'];
+            $business_father = addslashes($_POST['business-father']);
             $state = addslashes($_POST['state']);
             $city = addslashes($_POST['city']);
 
@@ -50,15 +48,7 @@
                     </div>
             <?php
                 }else {
-            ?>
-                    <div class="alert-acerto">
-                        <span class="fa fa-thumbs-o-up"></span>
-                        <span class="msg">Cadastrado com sucesso</span>
-                        <span class="close-btn">
-                            <span class="fa-time"></span>
-                        </span>
-                    </div>
-            <?php                
+                    header("Location: index.php");              
                 }
             }
         }   
@@ -79,12 +69,13 @@
                 <div class="form-group col-md-6">
                     <label for="business-father"> Pai Empresarial</label>
                     <select id="business-father" class="form-control" name="business-father">
+                            <option value="-" class="text-center"> - </option>
                         <?php
-                            foreach ($select_business as $value){
+                            foreach ($dados as $value){
                         ?>  
-                                <option value="<?php echo $value['id_business_father']?>">
+                                <option value="<?php echo $value['full_name']?>">
                                         <?php
-                                            echo $value['name'];
+                                            echo $value['full_name'];
                                         ?>
                                 </option>
                         <?php
@@ -125,7 +116,6 @@
                 </thead>
                 <tbody>
                     <?php 
-                        $dados = $user_information->select_user_information();
 
                         foreach ($dados as $value){
 
@@ -138,10 +128,10 @@
                             echo "<td>".$value['cell']."</td>";
                             echo "<td>".$value['city']." / ".$value['state']."</td>";
                             echo "<td>".$result."</td>";
-                            echo "<td>".$value['name']."</td>";
+                            echo "<td>".$value['business_father']."</td>";
                     ?>
                             <td>
-                                <a href="?id_view=<?php echo $value['business_father'];?>" id="to-edit">Rede</a>
+                                <a href="?id_view=<?php echo $value['full_name'];?>" id="to-edit">Rede</a>
                             </td>
                             <td>
                                 <a href="?id_delete=<?php echo $value['id_user'];?>" id="delete">Excluir</a>
